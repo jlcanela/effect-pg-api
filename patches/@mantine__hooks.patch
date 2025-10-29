@@ -1,0 +1,14 @@
+diff --git a/package.json b/package.json
+index 610367ead41eb8c1db83431b4ec5a0332a0e48d9..40a4fd0792198088328525b2e910ae08f935695e 100644
+--- a/package.json
++++ b/package.json
+@@ -29,7 +29,8 @@
+         "types": "./lib/index.d.ts",
+         "default": "./cjs/index.cjs"
+       }
+-    }
++    },
++    "./package.json": "./package.json"
+   },
+   "repository": {
+     "url": "https://github.com/mantinedev/mantine.git",

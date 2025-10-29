@@ -1,0 +1,60 @@
+{
+  "name": "@org/domain",
+  "version": "0.0.0",
+  "type": "module",
+  "license": "MIT",
+  "description": "The domain template",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/lucas-barake/rpc-tutorial.git",
+    "directory": "packages/domain"
+  },
+  "publishConfig": {
+    "access": "public",
+    "directory": "dist"
+  },
+  "exports": {
+    ".": {
+      "import": "./esm/index.js",
+      "require": "./esm/index.js",
+      "types": "./dts/index.d.ts"
+    },
+    "./api/generation": {
+      "import": "./esm/api/generation/index.js",
+      "require": "./esm/api/generation/index.js",
+      "types": "./dts/api/generation/index.d.ts"
+    },
+    "./package.json": "./package.json"
+  },
+  "scripts": {
+    "build": "tsc -b tsconfig.build.json && npm run copy-resources",
+    "copy-resources": "cpx 'build/esm/**/*' dist/esm && cpx 'build/dts/**/*' dist/dts && cpx package.json dist",
+    "build-annotate": "babel build/esm --plugins annotate-pure-calls --out-dir build/esm --source-maps",
+    "check": "tsc -b tsconfig.json",
+    "test": "vitest --run",
+    "coverage": "vitest --coverage"
+  },
+  "dependencies": {
+    "@effect/platform": "0.87.11",
+    "@effect/rpc": "0.61.1",
+    "@faker-js/faker": "^9.9.0",
+    "effect": "*",
+    "vite": "5.4.14"
+  },
+  "effect": {
+    "generateExports": {
+      "include": [
+        "**/*.ts"
+      ]
+    },
+    "generateIndex": {
+      "include": [
+        "**/*.ts"
+      ]
+    }
+  },
+  "devDependencies": {
+    "@effect/build-utils": "^0.8.3",
+    "cpx": "^1.5.0"
+  }
+}

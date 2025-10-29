@@ -1,0 +1,12 @@
+diff --git a/package.json b/package.json
+index 5aa7d1b0220a5db2b67c907ae61cc8c0702f1b0c..46591fcbba71bcf86189fc350014a402c1bf23bf 100644
+--- a/package.json
++++ b/package.json
+@@ -36,6 +36,7 @@
+         "default": "./cjs/index.cjs"
+       }
+     },
++    "./package.json": "./package.json",
+     "./styles.css": "./styles.css",
+     "./styles.layer.css": "./styles.layer.css"
+   },

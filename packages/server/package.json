@@ -1,0 +1,92 @@
+{
+  "name": "@org/server",
+  "version": "0.0.0",
+  "type": "module",
+  "license": "MIT",
+  "description": "The server template",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/lucas-barake/rpc-tutorial.git",
+    "directory": "packages/server"
+  },
+  "main": "build/esm/server.js",
+  "module": "build/esm/server.js",
+  "types": "build/dts/server.d.ts",
+  "files": [
+    "build"
+  ],
+  "scripts": {
+    "check": "tsc -b tsconfig.json",
+    "clean": "rm -rf build && rm -rf .tsbuildinfo",
+    "prebuild": "npm run clean",
+    "build": "tsc -b tsconfig.build.json",
+    "postbuild": "echo 'Build completed'",
+    "test": "vitest",
+    "coverage": "vitest --coverage",
+    "dev": "dotenv -e ../../.env tsx watch src/server.ts  ../client/dist/ ../mailing/dist/",
+    "db:migrate": "dotenv -e ../../.env tsx src/database/migrator.ts",
+    "db:test": "dotenv -e ../../.env tsx src/database/pg.test.ts",
+    "start": "dotenv -e ../../.env tsx build/esm/server.js",
+    "start:source": "pnpm start",
+    "circular": "madge --circular src/server.ts",
+    "lint": "eslint . --quiet",
+    "format": "prettier --write .",
+    "typecheck": "tsc --noEmit"
+  },
+  "dependencies": {
+    "@azure/cosmos": "^4.4.1",
+    "@effect/ai": "0.18.12",
+    "@effect/ai-anthropic": "0.8.12",
+    "@effect/ai-openai": "0.21.12",
+    "@effect/cluster": "*",
+    "@effect/experimental": "0.51.12",
+    "@effect/opentelemetry": "0.50.1",
+    "@effect/platform": "0.87.11",
+    "@effect/platform-node": "0.89.3",
+    "@effect/rpc": "0.61.1",
+    "@effect/sql": "*",
+    "@effect/sql-pg": "0.38.1",
+    "@open-policy-agent/opa-wasm": "^1.10.0",
+    "@opentelemetry/exporter-logs-otlp-grpc": "*",
+    "@opentelemetry/exporter-logs-otlp-http": "*",
+    "@opentelemetry/exporter-trace-otlp-grpc": "*",
+    "@opentelemetry/exporter-trace-otlp-http": "*",
+    "@opentelemetry/resources": "*",
+    "@opentelemetry/sdk-logs": "*",
+    "@opentelemetry/sdk-metrics": "^2.1.0",
+    "@opentelemetry/sdk-trace-base": "*",
+    "@opentelemetry/sdk-trace-node": "*",
+    "@opentelemetry/sdk-trace-web": "*",
+    "@opentelemetry/semantic-conventions": "*",
+    "@org/domain": "workspace:^",
+    "@testcontainers/postgresql": "^10.28.0",
+    "effect": "*",
+    "jose": "^6.1.0",
+    "pg": "8.13.1",
+    "tar-stream": "^3.1.7",
+    "uuid": "^13.0.0",
+    "vite": "5.4.14",
+    "zlib": "^1.0.5"
+  },
+  "effect": {
+    "generateExports": {
+      "include": [
+        "**/*.ts"
+      ]
+    },
+    "generateIndex": {
+      "include": [
+        "**/*.ts"
+      ]
+    }
+  },
+  "devDependencies": {
+    "@effect/vitest": "0.23.1",
+    "@types/pg": "^8.11.11",
+    "@types/tar-fs": "^2.0.4",
+    "@types/tar-stream": "^3.1.4",
+    "madge": "8.0.0",
+    "tsx": "^4.19.2",
+    "vitest": "^2.0.5"
+  }
+}
