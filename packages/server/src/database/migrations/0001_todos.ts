@@ -19,9 +19,28 @@ export default Effect.gen(function* () {
         `;
 
     yield* sql`
+        CREATE OR REPLACE FUNCTION normalize_diacritic(text) RETURNS text AS $$
+        DECLARE
+            normalized TEXT;
+            digraphs   TEXT[] := ARRAY['ae', 'oe', 'ue', 'ss'];
+            diacritics TEXT[] := ARRAY['ä', 'ö', 'ü', 'ß'];
+            graphs     TEXT[] := ARRAY['a',  'o',  'u',  's'];
+            i INTEGER;
+        BEGIN
+            normalized := lower(unaccent($1));
+            FOR i IN array_lower(digraphs, 1)..array_upper(digraphs, 1) LOOP
+                normalized := REPLACE(normalized, digraphs[i], graphs[i]);
+                normalized := REPLACE(normalized, diacritics[i], graphs[i]);
+            END LOOP;
+            RETURN normalized;
+        END;
+        $$ LANGUAGE plpgsql;
+        `;
+
+    yield* sql`
         CREATE OR REPLACE FUNCTION set_title_unaccent() RETURNS trigger AS $$
         BEGIN
-            NEW.title_unaccent := lower(unaccent(NEW.title));
+            NEW.title_unaccent := normalize_diacritic(NEW.title);
             RETURN NEW;
         END;
         $$ LANGUAGE plpgsql;

@@ -68,7 +68,7 @@ export class TodoRepository extends Effect.Service<TodoRepository>()("TodoReposi
                         title: Schema.String
                     }),
                     Result: Todo,
-                    execute: (request) => sql`SELECT * FROM todos WHERE to_tsvector('simple', title_unaccent) @@ to_tsquery('simple', ${request.title});`,
+                    execute: (request) => sql`SELECT * FROM todos WHERE to_tsvector('simple', title_unaccent) @@ to_tsquery('simple', normalize_diacritic(${request.title}));`,
                 }),
                 Effect.withSpan("findTodoByTitle"),
                 DieOnError,

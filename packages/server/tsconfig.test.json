@@ -3,8 +3,7 @@
   "include": ["src/**/*.test.ts"],
   "references": [
     { "path": "tsconfig.src.json" },
-    { "path": "../domain" },
-    { "path": "../mailing" }
+    { "path": "../domain" }
   ],
   "compilerOptions": {
     "types": ["node"],
