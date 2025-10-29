@@ -22,15 +22,19 @@ export default Effect.gen(function* () {
         CREATE OR REPLACE FUNCTION normalize_diacritic(text) RETURNS text AS $$
         DECLARE
             normalized TEXT;
-            digraphs   TEXT[] := ARRAY['ae', 'oe', 'ue', 'ss'];
-            diacritics TEXT[] := ARRAY['ä', 'ö', 'ü', 'ß'];
-            graphs     TEXT[] := ARRAY['a',  'o',  'u',  's'];
+            digraphs   TEXT[] := ARRAY[
+                'ae', 'oe', 'ue', 'ss', -- German, French
+                'æ', 'œ'                -- French ligatures (if present after unaccent, usually stripped)
+            ];
+            graphs     TEXT[] := ARRAY[
+                'a', 'o', 'u', 's',     -- canonical forms
+                'a', 'o'                -- ligatures
+            ];
             i INTEGER;
         BEGIN
             normalized := lower(unaccent($1));
             FOR i IN array_lower(digraphs, 1)..array_upper(digraphs, 1) LOOP
                 normalized := REPLACE(normalized, digraphs[i], graphs[i]);
-                normalized := REPLACE(normalized, diacritics[i], graphs[i]);
             END LOOP;
             RETURN normalized;
         END;
