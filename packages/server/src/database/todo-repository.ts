@@ -2,6 +2,9 @@ import { SqlClient, SqlSchema } from "@effect/sql";
 import { Effect, Schema, flow } from "effect";
 import { PgLive } from "./pg-live.js"
 
+export const TodoId = Schema.String.pipe(Schema.brand("TodoId"));
+export type TodoId = typeof TodoId.Type;
+
 // eslint-disable-next-line no-use-before-define
 export class Todo extends Schema.Class<Todo>("Todo")({
     id: Schema.String,
@@ -39,7 +42,7 @@ export class TodoRepository extends Effect.Service<TodoRepository>()("TodoReposi
                 }),
                 Effect.withSpan("insertTodo"),
             ),
-            del: flow(
+            delTodoById: flow(
                 SqlSchema.void({
                     Request: Schema.Struct({
                         id: Schema.String
@@ -47,19 +50,19 @@ export class TodoRepository extends Effect.Service<TodoRepository>()("TodoReposi
                     execute: (request) =>
                         sql`DELETE FROM todos WHERE id = ${request.id}`,
                 }),
-                Effect.withSpan("del"),
+                Effect.withSpan("delTodoById"),
                 DieOnError,
             ),
-            delAll: flow(
+            delAllTodos: flow(
                 SqlSchema.void({
                     Request: Schema.Void,
                     execute: () =>
                         sql`DELETE FROM todos`,
                 }),
-                Effect.withSpan("delAll"),
+                Effect.withSpan("delAllTodos"),
                 DieOnError,
             )(),
-            findbytitle: flow(
+            findTodoByTitle: flow(
                 SqlSchema.findAll({
                     Request: Schema.Struct({
                         title: Schema.String
@@ -67,16 +70,16 @@ export class TodoRepository extends Effect.Service<TodoRepository>()("TodoReposi
                     Result: Todo,
                     execute: (request) => sql`SELECT * FROM todos WHERE to_tsvector('simple', title_unaccent) @@ to_tsquery('simple', ${request.title});`,
                 }),
-                Effect.withSpan("findbytitle"),
+                Effect.withSpan("findTodoByTitle"),
                 DieOnError,
             ),
-            findall: flow(
+            findAllTodo: flow(
                 SqlSchema.findAll({
                     Request: Schema.Void,
                     Result: Todo,
                     execute: () => sql`SELECT * FROM todos`,
                 }),
-                Effect.withSpan("findall"),
+                Effect.withSpan("findAllTodo"),
                 DieOnError,
             )
         };
